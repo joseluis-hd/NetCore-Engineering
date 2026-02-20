@@ -1,0 +1,93 @@
+services:
+  coordinator:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.coordinator
+    container_name: coordinator
+    ports:
+      - "8080:8080"
+    environment:
+      - RUST_LOG=info
+      - BIND_ADDRESS=0.0.0.0:8080
+    networks:
+      distributed-net:
+        ipv4_address: 172.20.0.10
+    restart: unless-stopped
+
+  worker-1:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: worker-1
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=hub-worker-1
+      - COORDINATOR_URL=http://coordinator:8080
+      - PORT=8081
+    networks:
+      distributed-net:
+        ipv4_address: 172.20.0.11
+    depends_on:
+      - coordinator
+    restart: unless-stopped
+
+  worker-2:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: worker-2
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=hub-worker-2
+      - COORDINATOR_URL=http://coordinator:8080
+      - PORT=8081
+    networks:
+      distributed-net:
+        ipv4_address: 172.20.0.12
+    depends_on:
+      - coordinator
+    restart: unless-stopped
+
+  worker-3:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: worker-3
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=hub-worker-3
+      - COORDINATOR_URL=http://coordinator:8080
+      - PORT=8081
+    networks:
+      distributed-net:
+        ipv4_address: 172.20.0.13
+    depends_on:
+      - coordinator
+    restart: unless-stopped
+
+  worker-4:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: worker-4
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=hub-worker-4
+      - COORDINATOR_URL=http://coordinator:8080
+      - PORT=8081
+    networks:
+      distributed-net:
+        ipv4_address: 172.20.0.14
+    depends_on:
+      - coordinator
+    restart: unless-stopped
+
+networks:
+  distributed-net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1420"
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+          gateway: 172.20.0.1

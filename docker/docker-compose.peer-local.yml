@@ -1,0 +1,54 @@
+services:
+  peer-worker-1:
+    image: distributed-mandelbrot-worker:latest
+    container_name: peer-worker-1
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=peer-worker-1
+      - COORDINATOR_URL=http://10.10.10.1:8080
+      - PORT=8081
+    extra_hosts:
+      - "coordinator:10.10.10.1"
+    restart: unless-stopped
+
+  peer-worker-2:
+    image: distributed-mandelbrot-worker:latest
+    container_name: peer-worker-2
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=peer-worker-2
+      - COORDINATOR_URL=http://10.10.10.1:8080
+      - PORT=8081
+    extra_hosts:
+      - "coordinator:10.10.10.1"
+    restart: unless-stopped
+
+  peer-worker-3:
+    image: distributed-mandelbrot-worker:latest
+    container_name: peer-worker-3
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=peer-worker-3
+      - COORDINATOR_URL=http://10.10.10.1:8080
+      - PORT=8081
+    extra_hosts:
+      - "coordinator:10.10.10.1"
+    restart: unless-stopped
+
+  peer-worker-4:
+    image: distributed-mandelbrot-worker:latest
+    container_name: peer-worker-4
+    environment:
+      - RUST_LOG=info
+      - WORKER_ID=peer-worker-4
+      - COORDINATOR_URL=http://10.10.10.1:8080
+      - PORT=8081
+    extra_hosts:
+      - "coordinator:10.10.10.1"
+    restart: unless-stopped
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1420"
